@@ -1,0 +1,7 @@
+#Tue May 08 20:17:23 BRT 2018
+connection.gradle.distribution=GRADLE_DISTRIBUTION(LOCAL_INSTALLATION(/opt/gradle-4.5.1))
+override.workspace.settings=true
+gradle.user.home=/home/fdalessio/.gradle
+connection.project.dir=
+offline.mode=false
+build.scans.enabled=false
