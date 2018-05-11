@@ -25,15 +25,4 @@ public class DZoneUI {
 		UI.printAllDocs().subscribe(System.out::println);
 		UI.printJavaRefCardz();
 	}
-	
-	public static void teste() {
-		
-		for (Integer i = 0; i< 10000000; i++) {
-			
-			Observable<Integer> vals = Observable.just(i);
-	
-			vals.subscribeOn(Schedulers.io());
-			
-		}
-	}
 }
