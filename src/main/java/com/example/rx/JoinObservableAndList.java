@@ -74,7 +74,8 @@ public class JoinObservableAndList {
 		
 		// Tempo nao esta condizendo, simples teste na chamada de 2 metodos
 		Long initialTime2 = System.nanoTime();		
-			Observable.from(requestList).flatMap(car -> nothing(car));
+			Observable.from(requestList)
+				.flatMap(car -> nothing(car));
 		Long differenceTime2 = System.nanoTime() - initialTime2;
 		System.out.println("Método mais simples: " + differenceTime2 + "\n");
 		
