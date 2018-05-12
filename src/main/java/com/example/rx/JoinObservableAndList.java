@@ -7,7 +7,6 @@ import java.util.List;
 import com.example.list.Car;
 
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public class JoinObservableAndList {
 	
@@ -40,6 +39,7 @@ public class JoinObservableAndList {
 						.withName("civic")
 						.withColor("branco")
 						.withValue(9.00)
+						.withBrand("honda")
 						.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
 						.build();
 				
@@ -47,6 +47,7 @@ public class JoinObservableAndList {
 						.withName("fit")
 						.withColor("branco")
 						.withValue(6.00)
+						.withBrand("honda")
 						.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
 						.build();
 				
@@ -54,11 +55,13 @@ public class JoinObservableAndList {
 						.withName("hrv")
 						.withColor("branco")
 						.withValue(5.00)
+						.withBrand("honda")
 						.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
 						.build();
 			
-		// Se comentar o civicBd, quer dizer que nao encontrou no banco de dados
-		databaseList.add(civicBd);
+		// Se comentar o civicBd, quer dizer que nao encontrou no BD e portanto deve cair no switchIfEmpty
+		//databaseList.add(civicBd);
+		
 		// Exemplo caso o banco retorne mais dados que estamos requisitando
 		databaseList.add(fitBd);
 		databaseList.add(hrvBd);
@@ -68,12 +71,26 @@ public class JoinObservableAndList {
 									.toList()
 									.toBlocking()
 									.single();
-				
-		// Inves do observable responsavel pelo processamento individual das requisicoes ir no banco N vezes, ele busca N vezes na lista em memória que foi o retorno o Bd
-		Observable.from(requestList)
-			.flatMap(request -> process(request, memoryList))
-			.subscribe(a -> System.out.println(a.getName() + " " + a.getValue()));
+		
+		// Tempo nao esta condizendo , simples teste na chamada de 2 metodos
+		Long initialTime2 = System.nanoTime();		
+			Observable.from(requestList).flatMap(car -> nothing(car));
+		Long differenceTime2 = System.nanoTime() - initialTime2;
+		System.out.println("Método mais simples: " + differenceTime2 + "\n");
+		
+		// Inves do Observable responsavel pelo processamento individual das requisicoes ir no banco N vezes, ele busca N vezes na lista em memória que foi o retorno o BD
+		Long initialTime = System.nanoTime();
+			Observable.from(requestList)
+				.flatMap(request -> process(request, memoryList))
+				.subscribe(a -> System.out.println(a.getName() + " " + a.getValue()));
+		Long differenceTime = System.nanoTime() - initialTime;
+		System.out.println("\nMétodo que varre a lista: " + differenceTime);
 	}
+	
+	private static Observable<Car> nothing(Car car) {
+		return Observable.just(car);
+	}
+	
 		
 	private static Observable<Vehicle> process(Car request, List<Vehicle> memoryList) {
 		return Observable.just(request)

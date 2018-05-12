@@ -7,13 +7,15 @@ public class Vehicle {
 	private String name;
 	private String color;
 	private Double value;
+	private String brand;
 	private List<String> items;
 	
 	private Vehicle(Builder builder) {
 		this.name = builder.name;
 		this.color = builder.color;
 		this.value = builder.value;
-		this.items = builder.items;		
+		this.items = builder.items;	
+		this.brand = builder.brand;
 	}
 	
 	public String getColor() {
@@ -40,6 +42,14 @@ public class Vehicle {
 		this.value = value;
 	}
 	
+	public String getBrand() {
+		return brand;
+	}
+	
+	public void setValue(String brand) {
+		this.brand = brand;
+	}
+	
 	public Integer getItemsSize() {
 		return items.size();
 	}
@@ -53,6 +63,7 @@ public class Vehicle {
 		private String name;
 		private String color;
 		private Double value;
+		private String brand;
 		private List<String> items;
 		
 		public Builder() {}
@@ -69,6 +80,11 @@ public class Vehicle {
 		
 		public Builder withValue(Double value) {
             this.value = value;
+            return this;
+        }
+		
+		public Builder withBrand(String brand) {
+            this.brand = brand;
             return this;
         }
 		
