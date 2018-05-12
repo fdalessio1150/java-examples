@@ -32,7 +32,7 @@ public class JoinObservableAndList {
 		requestList.add(civic);
 		requestList.add(hrv);
 		
-		// Seria o retorno do banco em um objeto distinto, geralmente é um ResultSetFuture, o Observable possui integracao
+		// Seria o retorno do banco em um objeto distinto, geralmente e um ResultSetFuture, o Observable possui integracao
 		List<Vehicle> databaseList = new ArrayList<>();
 				
 		Vehicle civicBd = new Vehicle.Builder()
@@ -77,7 +77,7 @@ public class JoinObservableAndList {
 			Observable.from(requestList)
 				.flatMap(car -> nothing(car));
 		Long differenceTime2 = System.nanoTime() - initialTime2;
-		System.out.println("Método mais simples: " + differenceTime2 + "\n");
+		System.out.println("Metodo mais simples: " + differenceTime2 + "\n");
 		
 		// Inves do Observable responsavel pelo processamento individual das requisicoes ir no banco N vezes, ele busca N vezes na lista em memória que foi o retorno o BD
 		Long initialTime = System.nanoTime();
@@ -85,7 +85,7 @@ public class JoinObservableAndList {
 				.flatMap(request -> process(request, memoryList))
 				.subscribe(a -> System.out.println(a.getName() + " " + a.getValue()));
 		Long differenceTime = System.nanoTime() - initialTime;
-		System.out.println("\nMétodo que varre a lista: " + differenceTime);
+		System.out.println("\nMetodo que varre a lista: " + differenceTime);
 	}
 	
 	private static Observable<Car> nothing(Car car) {
@@ -95,11 +95,11 @@ public class JoinObservableAndList {
 		
 	private static Observable<Vehicle> process(Car request, List<Vehicle> memoryList) {
 		return Observable.just(request)
-			.flatMap(car -> findInList(car, memoryList))
+			.flatMap(car -> findInMemory(car, memoryList))
 			.switchIfEmpty(create(request));
 	}
 	
-	private static Observable<Vehicle> findInList(Car car, List<Vehicle> memoryList) {
+	private static Observable<Vehicle> findInMemory(Car car, List<Vehicle> memoryList) {
 		List<Vehicle> carList = new ArrayList<>();
 
 		for (int i = 0; i < memoryList.size(); i++) {
@@ -116,6 +116,7 @@ public class JoinObservableAndList {
 				.withName(car.getName())
 				.withColor(car.getColor())
 				.withValue(car.getValue())
+				.withBrand("honda")
 				.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
 				.build();
 				
