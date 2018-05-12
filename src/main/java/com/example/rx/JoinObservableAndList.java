@@ -72,7 +72,7 @@ public class JoinObservableAndList {
 									.toBlocking()
 									.single();
 		
-		// Tempo nao esta condizendo , simples teste na chamada de 2 metodos
+		// Tempo nao esta condizendo, simples teste na chamada de 2 metodos
 		Long initialTime2 = System.nanoTime();		
 			Observable.from(requestList).flatMap(car -> nothing(car));
 		Long differenceTime2 = System.nanoTime() - initialTime2;
