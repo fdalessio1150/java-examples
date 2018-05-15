@@ -29,8 +29,24 @@ public class JoinObservableAndList {
 				.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
 				.build();
 		
+		Car wrv = new Car.Builder()
+				.withName("wrv")
+				.withColor("branco")
+				.withValue(79999.99)
+				.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
+				.build();
+		
+		Car crv = new Car.Builder()
+				.withName("crv")
+				.withColor("branco")
+				.withValue(139999.99)
+				.withItems(Arrays.asList("ar-condicionado digital", "banco de couro", "direcao eletrica"))
+				.build();
+		
 		requestList.add(civic);
 		requestList.add(hrv);
+		requestList.add(wrv);
+		requestList.add(crv);		
 		
 		// Seria o retorno do banco em um objeto distinto, geralmente e um ResultSetFuture, o Observable possui integracao
 		List<Vehicle> databaseList = new ArrayList<>();
@@ -60,17 +76,14 @@ public class JoinObservableAndList {
 						.build();
 			
 		// Se comentar o civicBd, quer dizer que nao encontrou no BD e portanto deve cair no switchIfEmpty
-		//databaseList.add(civicBd);
+		databaseList.add(civicBd);
 		
 		// Exemplo caso o banco retorne mais dados que estamos requisitando
 		databaseList.add(fitBd);
 		databaseList.add(hrvBd);
 				
 		// Lista para Observable e em seguida como gravar em uma nova lista
-		List<Vehicle> memoryList = Observable.from(databaseList)
-									.toList()
-									.toBlocking()
-									.single();
+		Observable<Vehicle> memoryList = Observable.from(databaseList);
 		
 		// Tempo nao esta condizendo, simples teste na chamada de 2 metodos
 		Long initialTime2 = System.nanoTime();		
@@ -93,25 +106,17 @@ public class JoinObservableAndList {
 	}
 	
 		
-	private static Observable<Vehicle> process(Car request, List<Vehicle> memoryList) {
-		return Observable.just(request)
-			.flatMap(car -> findInMemory(car, memoryList))
+	private static Observable<Vehicle> process(Car request, Observable<Vehicle> memoryList) {
+		return findInMemory(request, memoryList.replay().autoConnect())
 			.switchIfEmpty(create(request));
 	}
 	
-	private static Observable<Vehicle> findInMemory(Car car, List<Vehicle> memoryList) {
-		List<Vehicle> carList = new ArrayList<>();
-
-		for (int i = 0; i < memoryList.size(); i++) {
-			if ( memoryList.get(i).getName().contains(car.getName()) == true) {
-				carList.add(memoryList.get(i));
-			}
-		}
-		
-		return Observable.from(carList);
+	private static Observable<Vehicle> findInMemory(Car car, Observable<Vehicle> memoryList) {
+		return memoryList.filter(v -> v.getName().contains(car.getName()) == true);
 	}
 	
 	private static Observable<Vehicle> create(Car car) {
+		System.out.println("entrei");
 		Vehicle a = new Vehicle.Builder()
 				.withName(car.getName())
 				.withColor(car.getColor())
