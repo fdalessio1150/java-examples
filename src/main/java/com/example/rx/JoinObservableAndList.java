@@ -77,46 +77,42 @@ public class JoinObservableAndList {
 			
 		// Se comentar o civicBd, quer dizer que nao encontrou no BD e portanto deve cair no switchIfEmpty
 		databaseList.add(civicBd);
-		
-		// Exemplo caso o banco retorne mais dados que estamos requisitando
 		databaseList.add(fitBd);
 		databaseList.add(hrvBd);
 				
 		// Lista para Observable e em seguida como gravar em uma nova lista
-		Observable<Vehicle> memoryList = Observable.from(databaseList);
+		Observable<Vehicle> databaseObservable = Observable.from(databaseList)
+											.replay()
+											.autoConnect();
 		
 		// Tempo nao esta condizendo, simples teste na chamada de 2 metodos
 		Long initialTime2 = System.nanoTime();		
 			Observable.from(requestList)
 				.flatMap(car -> nothing(car));
-		Long differenceTime2 = System.nanoTime() - initialTime2;
-		System.out.println("Metodo mais simples: " + differenceTime2 + "\n");
+		System.out.println("Metodo mais simples: " + (System.nanoTime() - initialTime2 )+ "\n");
 		
 		// Inves do Observable responsavel pelo processamento individual das requisicoes ir no banco N vezes, ele busca N vezes na lista em memória que foi o retorno o BD
 		Long initialTime = System.nanoTime();
 			Observable.from(requestList)
-				.flatMap(request -> process(request, memoryList))
+				.flatMap(request -> process(request, databaseObservable))
 				.subscribe(a -> System.out.println(a.getName() + " " + a.getValue()));
-		Long differenceTime = System.nanoTime() - initialTime;
-		System.out.println("\nMetodo que varre a lista: " + differenceTime);
+		System.out.println("\nMetodo que varre a lista: " + (System.nanoTime() - initialTime));
 	}
 	
 	private static Observable<Car> nothing(Car car) {
 		return Observable.just(car);
 	}
-	
-		
-	private static Observable<Vehicle> process(Car request, Observable<Vehicle> memoryList) {
-		return findInMemory(request, memoryList.replay().autoConnect())
+			
+	private static Observable<Vehicle> process(Car request, Observable<Vehicle> databaseObservable) {
+		return findInObservable(request, databaseObservable)
 			.switchIfEmpty(create(request));
 	}
 	
-	private static Observable<Vehicle> findInMemory(Car car, Observable<Vehicle> memoryList) {
-		return memoryList.filter(v -> v.getName().contains(car.getName()) == true);
+	private static Observable<Vehicle> findInObservable(Car car, Observable<Vehicle> databaseObservable) {
+		return databaseObservable.filter(v -> v.getName().contains(car.getName()) == true);
 	}
 	
 	private static Observable<Vehicle> create(Car car) {
-		System.out.println("entrei");
 		Vehicle a = new Vehicle.Builder()
 				.withName(car.getName())
 				.withColor(car.getColor())
