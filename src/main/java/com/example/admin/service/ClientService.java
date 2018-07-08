@@ -35,10 +35,12 @@ public class ClientService {
 	public void createClient(ClientRequestList clientList) {
 		
 		Client found = clientExists(clientList);
+		
 			
 		if (clientList.getAll().size() > 0 && found == null) {
 			for (ClientRequest client : clientList.getAll()) {
-				repository.createClient(toClientRepository(client));
+				Client c = toClientRepository(client);
+				repository.createClient(c);
 			}
 		}
 	}
@@ -46,7 +48,9 @@ public class ClientService {
 	private Client clientExists(ClientRequestList clientList) {
 		
 		if (clientList.getAll().size() > 0) {
+			
 			for (ClientRequest client : clientList.getAll()) {
+				
 				ListenableFuture<Client> future = repository.retrieveClientByName(client.getName());
 				Futures.addCallback(future, new FutureCallback<Client>() {
 					@Override
