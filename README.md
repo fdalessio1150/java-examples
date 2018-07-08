@@ -1,6 +1,21 @@
 # Java-examples 
 
 # Pacote Admin - Criação do banco
+
+# Linux -> parar o servidor e alterar o arquivo
+/etc/cassandra/conf/cassandra.yaml
+/etc/cassandra/default.conf/cassandra.yaml
+    cluster_name: 'local_cluster'
+
+# Cuidado ao deletar essas pastas pois contém as tabelas, e outras informações
+rm -rf /var/lib/cassandra/data/*
+rm -rf /var/lib/cassandra/commitlog/*
+rm -rf /var/lib/cassandra/saved_caches/*
+rm -rf /var/log/cassandra/*
+
+chown -R cassandra:cassandra /var/log/cassandra/
+
+# Windows -> basta executar o comando abaixo para alterar nome do cluster local
 UPDATE system.local SET cluster_name = 'local_cluster' where key='local';
 
 create keyspace BD001 with replication={'class':'SimpleStrategy', 'replication_factor':1};
