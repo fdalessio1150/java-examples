@@ -8,7 +8,7 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
 @Table(name = "TB001_CLIENT")
-public class Client {
+public class ClientRepository {
 
 	@PartitionKey(0)
     @Column(name = "CLI_NOME")
@@ -21,11 +21,11 @@ public class Client {
     @Column(name = "CLI_ID")
     private UUID id;
     
-    public Client() {
+    public ClientRepository() {
     	
     }
     
-    public Client(String name,
+    public ClientRepository(String name,
     			  String sex,
     			  UUID id) {
     	this.name = name;

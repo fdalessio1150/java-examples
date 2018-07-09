@@ -2,23 +2,16 @@ package com.example.admin.model;
 
 import java.util.UUID;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ClientRequest {
+public class Client {
 	
+	@JsonProperty("id_cliente")
 	private final UUID id;
-	 
-	@NotNull(message = "Campo nao pode ser nulo")
-	@NotEmpty(message = "Campo nao pode ser vazio")
+
 	@JsonProperty("nome")
 	private final String name;
-
-	@NotNull(message = "Campo nao pode ser nulo")
-	@NotEmpty(message = "Campo nao pode ser vazio")
+	
 	@JsonProperty("sexo")
 	private final String sex;
 	 
@@ -38,7 +31,7 @@ public class ClientRequest {
 		 return new Builder();
 	 }
 	    
-	 private ClientRequest(Builder builder) {
+	 private Client(Builder builder) {
 		 this.id = builder.id;
 		 this.name = builder.name;
 		 this.sex = builder.sex;
@@ -67,17 +60,8 @@ public class ClientRequest {
 			 return this;
 		 }
 		 
-	     public ClientRequest build() {
-	    	 return new ClientRequest(this);
+	     public Client build() {
+	    	 return new Client(this);
 	     }
-	 }
-	 
-	 @JsonCreator
-	 static ClientRequest json(@JsonProperty(value = "nome") String name,
-			 				   @JsonProperty(value = "sexo") String sex) {
-		 return builder().withId(UUID.nameUUIDFromBytes(String.valueOf(name + sex).getBytes()))
-				 .withName(name)
-				 .withSex(sex)
-				 .build();
 	 }
 }
