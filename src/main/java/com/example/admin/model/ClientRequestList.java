@@ -6,18 +6,24 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class ClientRequestList {
 
-    @Valid
-    private final List<ClientRequest> data;
-
-    public List<ClientRequest> getAll() {
-		return data;
-	}
+	@Valid
+    private List<ClientRequest> data;
 
 	private ClientRequestList(Builder builder) {
         this.data = Objects.requireNonNull(builder.clients);
+    }
+	
+	@JsonValue
+    public List<ClientRequest> getData() {
+		return data;
+	}
+	
+    public void setData(List<ClientRequest> data) {
+        this.data = data;
     }
     
     public static Builder builder() {

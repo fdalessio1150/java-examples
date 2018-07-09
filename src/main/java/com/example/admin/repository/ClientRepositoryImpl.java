@@ -13,26 +13,26 @@ import com.datastax.driver.mapping.Result;
 public class ClientRepositoryImpl implements ClientRepositoryInterface {
 	
 	private final ClientAccessor clientAccessor;
-	private final Mapper<Client> clientMapper;
+	private final Mapper<ClientRepository> clientMapper;
 
 	@Autowired
 	public ClientRepositoryImpl(MappingManager manager) {
 		 this.clientAccessor = manager.createAccessor(ClientAccessor.class);
-		 this.clientMapper = manager.mapper(Client.class);
+		 this.clientMapper = manager.mapper(ClientRepository.class);
 	}
 	
 	@Override
-	public Result<Client> retrieveAllClients()  {
+	public Result<ClientRepository> retrieveAllClients()  {
 		return clientAccessor.getAll();
 	}
 
 	@Override
-	public Result<Client> retrieveClientByName(String name) {	
+	public Result<ClientRepository> retrieveClientByName(String name) {	
 		return clientAccessor.getClientByName(name);	
 	}
 
 	@Override
-	public void createClient(Client client) {
+	public void createClient(ClientRepository client) {
 		clientMapper.saveAsync(client);
 	}
 

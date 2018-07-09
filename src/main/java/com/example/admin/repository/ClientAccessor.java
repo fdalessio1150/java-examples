@@ -9,8 +9,8 @@ import com.datastax.driver.mapping.annotations.Query;
 public interface ClientAccessor {
 	
     @Query("SELECT * FROM TB001_CLIENT")
-    Result<Client> getAll();
+    Result<ClientRepository> getAll();
     
     @Query("SELECT * FROM TB001_CLIENT WHERE CLI_NOME = :n")
-    Result<Client> getClientByName(@Param("n") String name);
+    Result<ClientRepository> getClientByName(@Param("n") String name);
 }
