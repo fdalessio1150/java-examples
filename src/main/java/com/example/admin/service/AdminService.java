@@ -1,5 +1,6 @@
 package com.example.admin.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,28 +10,38 @@ import org.springframework.stereotype.Component;
 import com.example.admin.model.Client;
 import com.example.admin.model.ClientRequestList;
 import com.example.admin.model.ClientResponse;
-import com.example.admin.model.ToModel;
 
 @Component
 @Lazy
 public class AdminService {
 
 	private ClientService service;
-	private ToModel model;
 	
 	@Autowired
-	public AdminService(ClientService service, ToModel model) {
+	public AdminService(ClientService service) {
 		this.service = service;
-		this.model = model;
 	}
 	
 	public List<ClientResponse> retrieveClients(String name) {
 		List<Client> clientList = service.retrieveClients(name);
-		return model.toClientResponse(clientList);
+		return toClientResponse(clientList);
 	}
 	
 	public void createClient(ClientRequestList clientList) {
 		service.createClient(clientList);
+	}
+	
+	private List<ClientResponse> toClientResponse(List<Client> clientList) {
+		List<ClientResponse> clientResponseList = new ArrayList<>();
+		
+		for (Client client : clientList) {
+			ClientResponse clientResponse = ClientResponse.builder()
+												.withClient(client)
+												.build();
+			clientResponseList.add(clientResponse);
+		}
+		
+		return clientResponseList;
 	}
 	
 }
