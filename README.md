@@ -15,7 +15,7 @@ rm -rf /var/log/cassandra/*
 
 chown -R cassandra:cassandra /var/log/cassandra/
 
-# Windows -> basta executar o comando abaixo para alterar nome do cluster local
+# Windows -> executar o comando abaixo para alterar nome do cluster local e depois alterar o arquivo yaml
 UPDATE system.local SET cluster_name = 'local_cluster' where key='local';
 
 create keyspace BD001 with replication={'class':'SimpleStrategy', 'replication_factor':1};

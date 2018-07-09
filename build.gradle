@@ -27,7 +27,7 @@ repositories {
 
 ext {
     springCloudVersion = 'Finchley.RC2'
-    cassandraVersion = '3.5.0'
+    cassandraVersion = '3.4.0'
     jsonVersion = '2.9.5'
 }
 
@@ -44,7 +44,9 @@ dependencies {
     
 	compile 'io.reactivex.rxjava2:rxjava:2.0.0'
 	compile 'joda-time:joda-time:2.10'
-
+	
+	compile 'io.netty:netty-all:4.1.25.Final'
+	
     testCompile 'junit:junit:4.12'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

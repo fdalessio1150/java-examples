@@ -12,12 +12,12 @@ public class ClientRequest {
 	
 	 private final UUID id;
 	 
-	 @NotNull(message = "Campo obrigatório")
-	 @NotEmpty(message = "Campo obrigatório")
+	 @NotNull(message = "Campo obrigatorio")
+	 @NotEmpty(message = "Campo obrigatorio")
 	 @JsonProperty("nome")
 	 private final String name;
 
-	 @NotNull(message = "Campo obrigatório")
+	 @NotNull(message = "Campo obrigatorio")
 	 @JsonProperty("sexo")
 	 private final String sex;
 	 

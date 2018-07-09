@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
-import com.google.common.util.concurrent.ListenableFuture;
 
 @Repository
 @Lazy
@@ -23,12 +22,12 @@ public class ClientRepositoryImpl implements ClientRepositoryInterface {
 	}
 	
 	@Override
-	public ListenableFuture<Result<Client>> retrieveAllClients()  {
+	public Result<Client> retrieveAllClients()  {
 		return clientAccessor.getAll();
 	}
 
 	@Override
-	public ListenableFuture<Client> retrieveClientByName(String name) {	
+	public Result<Client> retrieveClientByName(String name) {	
 		return clientAccessor.getClientByName(name);	
 	}
 
