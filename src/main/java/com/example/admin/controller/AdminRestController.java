@@ -34,9 +34,10 @@ public class AdminRestController {
 		return service.retrieveClients(name);
 	}
 
-	@RequestMapping(value = "/client/{name}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> createClients(@RequestBody @Valid ClientRequestList body,
-											      @PathVariable String name) {
+	@RequestMapping(value = "/clients/{name}", method = RequestMethod.POST,
+					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> createClients(@RequestBody @Valid ClientRequestList body, @PathVariable String name) {
 		service.createClient(body);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
