@@ -10,3 +10,5 @@
 /.settings/
 /.idea/
 /out/
+java-examples.iml
+/src/main/resources/
